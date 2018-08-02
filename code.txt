@@ -1,0 +1,171 @@
+from Tkinter import *
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setup(13,GPIO.OUT)
+GPIO.setup(18,GPIO.OUT)
+GPIO.setup(3,GPIO.OUT)
+GPIO.setup(5,GPIO.OUT)
+GPIO.setup(29,GPIO.OUT)
+GPIO.setup(40,GPIO.OUT)
+GPIO.setup(10,GPIO.OUT)
+GPIO.setup(11,GPIO.OUT)
+
+
+
+class aplication(Frame):
+    def __init__(self,master):
+        Frame.__init__(self,master)
+        self.grid()
+        self.create_widgets()
+
+
+    def create_widgets(self):
+        self.instruction=Label(self,text="Enter the user id")
+        self.instruction.grid(row=1,column=0,columnspan=2,sticky=W)
+        self.instruction=Label(self,text="Enter the Password")
+        self.instruction.grid(row=2,column=0,columnspan=2,sticky=W)
+
+        self.text=Text(self,width=20,height=2,wrap=WORD)
+        self.text.grid(row=3,column=0,columnspan=2,sticky=W)
+
+        self.userid=Entry(self)       #Entry is used to create of box to write
+        self.userid.grid(row=1,column=12,sticky=W)
+        
+        self.password=Entry(self,show='*')       #Entry is used to create of box to write
+        self.password.grid(row=2,column=12,sticky=W)
+
+        self.submit_button=Button(self,text="Submit",command=self.reveal)
+        self.submit_button.grid(row=3,column=6,sticky=W)
+
+    def reveal(self):
+        self.text.delete(0.0,END)
+        content=self.password.get()
+        userid=self.userid.get()
+        if content == "35601310" and userid=="SMART_SNIPER":
+            message="Your Password and userid is Correct"
+            self.text.insert(0.0,message)
+
+            Label(self,text="Control motor").grid(row=0,column=0,sticky=W)
+
+            self.s_bt=Button(self,text="UP")
+            self.s_bt["command"]=self.u_op
+            self.s_bt.grid(row=5,column=12,columnspan=10)
+
+            self.sr_bt=Button(self,text="DOWN")
+            self.sr_bt["command"]=self.d_op
+            self.sr_bt.grid(row=12,column=12,columnspan=10)
+            
+            self.sr_bt=Button(self,text="LEFT")
+            self.sr_bt["command"]=self.l_op
+            self.sr_bt.grid(row=6,column=1,columnspan=10)
+
+            self.sf_bt=Button(self,text="RIGHT")
+            self.sf_bt["command"]=self.r_op
+            self.sf_bt.grid(row=6,column=25,columnspan=10)
+
+            self.sr_bt=Button(self,text="FIRE")
+            self.sr_bt["command"]=self.f_op
+            self.sr_bt.grid(row=16,column=1,columnspan=10)
+
+            self.sr_bt=Button(self,text="LOAD")
+            self.sr_bt["command"]=self.g_op
+            self.sr_bt.grid(row=16,column=25,columnspan=10)
+        else:
+            message="Please Try Again"
+            self.text.insert(0.0,message)
+
+    def l_op(self):
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.HIGH)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        time.sleep(0.5)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+
+    def r_op(self):
+        GPIO.output(13,GPIO.HIGH)
+        GPIO.output(18,GPIO.LOW)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        time.sleep(0.5)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+
+        
+    def u_op(self):
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.HIGH)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        time.sleep(0.2)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+
+
+
+    def d_op(self):
+        GPIO.output(3,GPIO.HIGH)
+        GPIO.output(5,GPIO.LOW)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        time.sleep(0.2)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+
+    def f_op(self):
+        GPIO.output(29,GPIO.HIGH)
+        GPIO.output(40,GPIO.LOW)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        time.sleep(22)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+
+    def g_op(self):
+        GPIO.output(10,GPIO.HIGH)
+        GPIO.output(11,GPIO.LOW)
+        GPIO.output(3,GPIO.LOW)
+        GPIO.output(5,GPIO.LOW)
+        GPIO.output(13,GPIO.LOW)
+        GPIO.output(18,GPIO.LOW)
+        GPIO.output(29,GPIO.LOW)
+        GPIO.output(40,GPIO.LOW)
+        time.sleep(9)
+        GPIO.output(10,GPIO.LOW)
+        GPIO.output(11,GPIO.LOW)
+        
+        
+
+root=Tk()
+root.title("SMART_SNIPER_CONTROL")
+root.geometry("500x500")
+app=aplication(root)
+app.grid()
+
+root.mainloop()
+
+
+
